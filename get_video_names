@@ -1,0 +1,18 @@
+#function outputs a list "my_videos" which is a list of all the video files in .fits or .tif format
+# in the chosen directory (my_path)
+def get_video_names(my_path):
+    my_files = os.listdir(my_path)
+    my_videos = []
+    my_exts = []
+
+    for file_name in my_files:
+
+        if file_name[-5:] == ".fits":
+            my_videos.append(file_name[:-5])
+            my_exts.append(".fits")
+
+        elif file_name[-4:] == ".tif":
+            my_videos.append(file_name[:-4])
+            my_exts.append(".tif")
+
+    return my_videos, my_exts
