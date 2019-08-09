@@ -1,0 +1,29 @@
+# function that reads and processes data in the excel files output from "my_script"
+# takes as input a list of csv files (my_videos) and directory where they are stored (my_path)
+# performs the following:
+# 1) separates roi traces from bg, avg, err
+# 2) calculates avg (w/o bg) + sem
+# 3) subtracts bg from every roi trace
+# 4) outputs these ready to use traces as a Pandas dataframe
+# 5) writes all named traces to excel sheet
+def compile_traces(my_videos, my_path):
+    traces = pd.DataFrame()
+
+    for video_name in my_videos:
+        file_loc = str(my_path + "/" + video_name + ".csv")
+        raw_data = pd.read_csv(file_loc)
+
+        rois = raw_data.iloc[:, :-3]
+        bg = raw_data.iloc[:, len(raw_data.columns) - 3]
+
+        df = rois.sub(bg, axis='rows')
+        avg = df.mean(axis=1, skipna='True')
+        sem = df.sem(axis=1, skipna='True')
+
+        traces[video_name] = avg
+        traces[str('sem_' + video_name)] = sem
+
+    traces.to_excel(str(my_path + '/avg_traces.xlsx'), index='None', header='True')
+
+    return df
+
