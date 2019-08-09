@@ -1,0 +1,36 @@
+# function that writes a custom Fiji script to analyze our videos using a Fiji plugin - TimeSeriesAnalyzer
+# takes as input a list of video names, the location of the files and their extensions. Matches each video to its appropriate ROI set
+def create_Fiji_script(my_videos, my_path, my_exts):
+    file = open(my_path + "/my_script.txt", 'w')
+
+    # opening time series analyzer plugin once
+    file.write('run("Time Series Analyzer V3");')
+
+    counter = 0
+    for item in my_videos:
+        # getting my video and roi extensions
+        video_name = item + my_exts[counter]
+        rois = 'RoiSet' + item + '.zip'
+        counter += 1
+
+        # opening my video
+        file.write('\nopen("' + my_path + '/' + video_name + '");')
+        file.write('\nselectWindow("' + video_name + '");')
+
+        # opening the RoiSet for that video
+        file.write('\nroiManager("Open", "' + my_path + '/' + rois + '");')
+
+        # running time trace average from my plugins
+        file.write('\nrun("IJ Robot", "order=Left_Click x_point=171 y_point=117 delay=300")')
+
+        # saving time trace averages
+        file.write('\nselectWindow("Time Trace(s)");')
+        file.write('\nsaveAs("Results", "' + my_path + '/' + item + '.csv");')
+
+        # writing custom script to file
+        file.write('\nroiManager("Delete");')
+
+    #closing all open windows after getting data
+    file.write('\nrun("Close All");')
+
+    file.close()
