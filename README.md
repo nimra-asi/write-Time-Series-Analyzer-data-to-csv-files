@@ -11,4 +11,3 @@ also makes use of the excellent IJ robot plugin (https://imagej.net/IJ_Robot).
 
 Fiji (an image processing package distribution of ImageJ) comes preinstalled with the Time Series Analyzer plugin
 
-Blog post on this code linked here: https://nimasiworks.wordpress.com/whats-in-a-threshold/
